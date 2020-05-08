@@ -72,11 +72,13 @@ def print_pairing_info(melon_types):
 def make_melon_type_lookup(melon_types):
     """Takes a list of MelonTypes and returns a dictionary of melon type by code."""
 
-    melon_code_dict = {}
+    melon_code_dict= {}
 
     for melon in melon_types:
-        melon_code_dict[melon.code] = melon
-
+        for code in melon.code:
+            if code not in melon_code_dict:
+                melon_code_dict[melon.code] = melon
+  
     return melon_code_dict
 
 ############
@@ -88,10 +90,10 @@ class Melon(object):
 
     # Fill in the rest
     # Needs __init__ and is_sellable methods
-    def __init__ (self, melon_type, shape_rating, color_rating, field, farmer):
+    def __init__ (self, code, shape_rating, color_rating, field, farmer):
         """Initialize a melon"""
 
-        self.melon_type = melon_type
+        self.code = code
         self.shape_rating = shape_rating
         self.color_rating = color_rating
         self.field = field
@@ -100,47 +102,45 @@ class Melon(object):
 
     def is_sellable(self):
 
-        for melon in melon_objects:
-            if shape_rating > 5 and color_rating > 5 and field != 3:
-                return True
-            else:
-                return False
+        if self.shape_rating > 5 and self.color_rating > 5 and self.field != 3:
+            return True
+        else:
+            return False
          
 def make_melons(melon_types):
     """Returns a list of Melon objects."""
 
-    melons_by_id = make_melon_type_lookup(melon_types)
-    melons_objects = []
+    melon_code_dict = melon_types
+    melon_objects = []
 
-    Melon_1 = Melon(melons_by_id['yw'], 8, 7, 2, 'Sheila')
-    Melon_2 = Melon(melons_by_id['yw'], 3, 4, 2, 'Sheila')
-    Melon_3 = Melon(melons_by_id['yw'], 9, 8, 3, 'Sheila')
-    Melon_4 = Melon(melons_by_id['cas'], 10, 6, 35, 'Sheila')
-    Melon_5 = Melon(melons_by_id['cren'], 8, 9, 35, 'Michael')
-    Melon_6 = Melon(melons_by_id['cren'], 8, 2, 35, 'Michael')
-    Melon_7 = Melon(melons_by_id['cren'],2, 3, 4, 'Michael')
-    Melon_8 = Melon(melons_by_id['musk'], 6, 7, 4, 'Michael')
-    Melon_9 = Melon(melons_by_id['yw'], 7, 10, 3, 'Sheila')
+    melon_1 = Melon(melon_code_dict['yw'], 8, 7, 2, 'Sheila')
+    melon_2 = Melon(melon_code_dict['yw'], 3, 4, 2, 'Sheila')
+    melon_3 = Melon(melon_code_dict['yw'], 9, 8, 3, 'Sheila')
+    melon_4 = Melon(melon_code_dict['cas'], 10, 6, 35, 'Sheila')
+    melon_5 = Melon(melon_code_dict['cren'], 8, 9, 35, 'Michael')
+    melon_6 = Melon(melon_code_dict['cren'], 8, 2, 35, 'Michael')
+    melon_7 = Melon(melon_code_dict['cren'],2, 3, 4, 'Michael')
+    melon_8 = Melon(melon_code_dict['musk'], 6, 7, 4, 'Michael')
+    melon_9 = Melon(melon_code_dict['yw'], 7, 10, 3, 'Sheila')
     
-    melon_objects.extend([Melon_1, Melon_2, Melon_3, Melon_4, Melon_5, Melon_6, 
-                          Melon_7, Melon_8, Melon_9])
+    melon_objects.extend([melon_1, melon_2, melon_3, melon_4, melon_5, melon_6, 
+                          melon_7, melon_8, melon_9])
 
-    for melon in melon_objects:
-        print(f'{melon} code is {code}.')
-
-
-    return melon_objects
+    print(f'melon objects are {melon_objects}')
+    return melon_objects 
 
 
 def get_sellability_report(melons):
     """Given a list of melon object, prints whether each one is sellable."""
 
-    for melon in melons:
+    melon_objects = melons
+
+    for melon in melon_objects:
         if melon.is_sellable():
-            print (f'Harvested by {farmer} from field {field}. (CAN BE SOLD)')
+            print (f'Harvested by {melon.farmer} from field {melon.field}. (CAN BE SOLD)')
 
         else: 
-            print(f'Harvested by {farmer} from field {field}. (NOT SELLABLE)')
+            print(f'Harvested by {melon.farmer} from field {melon.field}. (NOT SELLABLE)')
 
 
 
